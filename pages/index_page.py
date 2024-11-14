@@ -1,3 +1,5 @@
+import time
+
 from playwright.sync_api import Page
 
 
@@ -13,10 +15,10 @@ class IndexPage:
         Navigates to the index page and waits until the main logo image is visible.
         """
         self.page.goto(self.URL, wait_until="domcontentloaded")
-        self.page.get_by_role("link", name="Siberian Federal University").is_visible()
+        time.sleep(1.5)
 
     def is_visible(self) -> bool:
-        return self.page.get_by_role("link", name="Siberian Federal University").is_visible()
+        return self.page.get_by_alt_text("Сибирский федеральный университет").is_visible()
 
     def get_title(self):
         """

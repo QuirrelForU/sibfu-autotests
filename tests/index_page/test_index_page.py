@@ -1,11 +1,15 @@
+from playwright.sync_api import expect
+
+from pages.employee_info_page import EmployeeInfoPage
 from pages.index_page import IndexPage
 from pages.postgraduate_page import PostgraduateInfoPage
+from pages.students_info_page import StudentsInfoPage
 
 
 def test_page_is_visible(page):
     index_page = IndexPage(page)
     index_page.navigate()
-    assert index_page.is_visible()
+    expect(page.locator(".signature-ru")).to_be_visible()
 
 
 def test_page_title(page):
@@ -23,3 +27,22 @@ def test_postgraduate_section(page):
     index_page.page.wait_for_url(PostgraduateInfoPage.URL)
     postgraduate_page = PostgraduateInfoPage(page)
     assert postgraduate_page.is_visible()
+
+
+def test_employee_section(page):
+    index_page = IndexPage(page)
+    index_page.navigate()
+    index_page.page.locator("#footer-fast-nav").get_by_role("link", name="Сотруднику").click()
+    index_page.page.wait_for_url(EmployeeInfoPage.URL)
+    employee_info_page = EmployeeInfoPage(page)
+    assert employee_info_page.is_visible()
+
+
+
+def test_students_section(page):
+    index_page = IndexPage(page)
+    index_page.navigate()
+    index_page.page.get_by_title("Студенту").click()
+    index_page.page.wait_for_url(StudentsInfoPage.URL)
+    employee_info_page = StudentsInfoPage(page)
+    employee_info_page.is_visible()
