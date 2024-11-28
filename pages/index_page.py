@@ -1,27 +1,21 @@
-import time
+from pages.base_page import BasePage
+from pages.employee_info_page import EmployeeInfoPage
+from pages.postgraduate_page import PostgraduateInfoPage
+from pages.students_info_page import StudentsInfoPage
 
-from playwright.sync_api import Page
 
+class IndexPage(BasePage):
+    """Represent `Index` page."""
+    base_url = "https://www.sfu-kras.ru/"
 
-class IndexPage:
-    URL = "https://www.sfu-kras.ru/"
-    MAIN_LOGO_SELECTOR = "xpath=//*[@class='main-logo-image']"  # Define the selector as a class variable
+    def open_postgraduate_page(self) -> PostgraduateInfoPage:
+        self.page.get_by_title("Аспиранту").click()
+        return PostgraduateInfoPage(self.page)
 
-    def __init__(self, page: Page):
-        self.page = page
+    def open_employee_info_page(self) -> EmployeeInfoPage:
+        self.page.locator("#footer-fast-nav").get_by_role("link", name="Сотруднику").click()
+        return EmployeeInfoPage(self.page)
 
-    def navigate(self):
-        """
-        Navigates to the index page and waits until the main logo image is visible.
-        """
-        self.page.goto(self.URL, wait_until="domcontentloaded")
-        time.sleep(1.5)
-
-    def is_visible(self) -> bool:
-        return self.page.get_by_alt_text("Сибирский федеральный университет").is_visible()
-
-    def get_title(self):
-        """
-        Retrieves the title of the current page.
-        """
-        return self.page.title()
+    def open_students_info_page(self) -> StudentsInfoPage:
+        self.page.get_by_title("Студенту").click()
+        return StudentsInfoPage(self.page)

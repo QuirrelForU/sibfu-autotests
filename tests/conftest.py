@@ -17,7 +17,9 @@ def browser(playwright_instance):
 
 @pytest.fixture(scope="session")
 def context(browser):
-    context = browser.new_context()
+    context = browser.new_context(
+        locale="ru-RU",
+    )
     yield context
     context.close()
 

@@ -1,11 +1,6 @@
-from playwright.sync_api import Page, expect
+from pages.base_page import BasePage
 
 
-class StudentsInfoPage:
-    URL = "https://www.sfu-kras.ru/gateways/students"
-
-    def __init__(self, page: Page):
-        self.page = page
-
-    def is_visible(self) -> None:
-        expect(self.page.get_by_role("heading", name="Студенту")).to_be_visible()
+class StudentsInfoPage(BasePage):
+    """Represent `StudentsInfo` page."""
+    base_url = "https://www.sfu-kras.ru/gateways/students"

@@ -1,13 +1,6 @@
-from playwright.sync_api import Page
+from pages.base_page import BasePage
 
 
-class PostgraduateInfoPage:
-    URL = "https://research.sfu-kras.ru/asp"
-
-    def __init__(self, page: Page):
-        self.page = page
-
-    def is_visible(self) -> bool:
-        return self.page.get_by_role(
-            "heading", name="Аспирантура Сибирского федерального университета"
-            ).is_visible()
+class PostgraduateInfoPage(BasePage):
+    """Represent `PostgraduateInfo` page."""
+    base_url = "https://research.sfu-kras.ru/asp"
