@@ -1,5 +1,5 @@
 import pytest
-from playwright.sync_api import Playwright, sync_playwright
+from playwright.sync_api import sync_playwright
 
 
 @pytest.fixture(scope="session")
@@ -17,7 +17,9 @@ def browser(playwright_instance):
 
 @pytest.fixture(scope="session")
 def context(browser):
-    context = browser.new_context()
+    context = browser.new_context(
+        locale="ru-RU",
+    )
     yield context
     context.close()
 
