@@ -1,26 +1,39 @@
-from playwright.sync_api import Locator
+from xml.sax.xmlreader import Locator
+
+from pages.base_page import BasePage
 
 
 class Element:
     """
     Descriptor for Playwright Locator elements.
-    Usage:
-        first_name = Element("input[name='first_name']")
     """
 
-    def __init__(self, locator: str):
+    def __init__(
+        self,
+        locator: str | None = None,
+        text: str | None = None,
+        label: str | None = None,
+        exact: bool = True,
+    ):
         self.locator = locator
-        self.private_name = f"_{locator.replace('=', '_').replace('[', '_').replace(']', '_')}"
+        self.text = text
+        self.label = label
+        self.exact = exact
 
     def __set_name__(self, owner, name):
         self.attribute_name = name
 
-    def __get__(self, instance, owner):
+    def __get__(self, instance: BasePage, owner):
         if instance is None:
-            return self  # Accessed through the class, return the descriptor itself
-        # Retrieve the Locator from the Playwright Page instance
-        locator_obj: Locator = instance.page.locator(self.locator)
-        return locator_obj
+            raise BaseException(
+                "Please provide a locator"
+            )
+        if self.locator:
+            return instance.page.locator(self.locator)
+        elif self.text:
+            return instance.page.get_by_text(self.text, exact=self.exact)
+        elif self.label:
+            return instance.page.get_by_label(self.label, exact=self.exact)
 
     def __set__(self, instance, value):
         raise AttributeError(
