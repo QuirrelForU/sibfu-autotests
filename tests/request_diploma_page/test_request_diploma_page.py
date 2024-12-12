@@ -1,3 +1,5 @@
+import time
+
 from playwright.sync_api import expect
 
 from pages.request_diploma_page import RequestDiplomaPage
@@ -10,8 +12,7 @@ def test_form_visible(request_diploma_page: RequestDiplomaPage):
 
 def test_sending_form_request(request_diploma_page: RequestDiplomaPage):
     """Check that user can send diploma request."""
-    import ipdb
-    ipdb.set_trace()
+    time.sleep(3)
     request_diploma_page.last_name.fill("Фамилия")
     request_diploma_page.first_name.fill("Имя")
     request_diploma_page.surname.fill("Отчество")
@@ -36,6 +37,11 @@ def test_sending_form_request(request_diploma_page: RequestDiplomaPage):
     request_diploma_page.diploma_day.select_option("15")
     request_diploma_page.diploma_month.select_option("3")
     request_diploma_page.diploma_year.select_option("2004")
-    import ipdb
-    ipdb.set_trace()
+    request_diploma_page.take_by_myself.click()
+    time.sleep(3)
 
+    request_diploma_page.confirm_request()
+
+    expect(request_diploma_page.validation_message).to_contain_text(
+        "Поле «Скан/фото диплома» обязательно для заполнения."
+    )

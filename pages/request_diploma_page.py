@@ -1,4 +1,6 @@
-from xml.sax.xmlreader import Locator
+from cProfile import label
+
+from playwright.sync_api import Locator
 
 from pages.base_page import BasePage
 from pages.common.element import Element
@@ -46,7 +48,17 @@ class RequestDiplomaPage(BasePage):
     personal_data_checkbox = Element(
         label="Я даю согласие на обработку моих персональных данных (Подробнее)"
     )
+    take_by_myself = Element(label="Лично (по предварительной записи)")
 
     @property
     def send_button(self) -> Locator:
         return self.page.get_by_role("button", name="Отправить запрос")
+
+    @property
+    def validation_message(self)->Locator:
+        return self.page.locator("#page-content")
+
+    def confirm_request(self):
+        self.send_button.click()
+
+
